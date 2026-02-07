@@ -18,11 +18,8 @@ jobs:
       with:
         dotnet-version: 6.0.x
 
-    - name: Add Emby MyGet Source
-      run: dotnet nuget add source "https://www.myget.org/F/emby/api/v3/index.json" --name EmbyMyGet
-
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore --source "https://api.nuget.org/v3/index.json" --source "https://www.myget.org/F/emby/api/v3/index.json"
 
     - name: Build
       run: dotnet build --configuration Release --no-restore
