@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>115Master Subtitles</title>
+</head>
+
+<body>
+    <div data-role="page" class="type-interior pluginConfigurationPage oneOneFiveMasterConfigurationPage"
+        data-require="emby-input,emby-button,emby-select,emby-checkbox">
+        <div data-role="content">
+            <div class="content-primary">
+                <form class="oneOneFiveMasterConfigurationForm">
+                    <div class="sectionTitleContainer flex align-items-center">
+                        <h2 class="sectionTitle">115Master Subtitles Configuration</h2>
+                        <a href="https://github.com/cbingb666/115master" target="_blank"
+                            class="raised button-alt headerButton emby-button">
+                            <i class="md-icon">help</i>
+                            <span>Help</span>
+                        </a>
+                    </div>
+
+                    <div class="verticalSection">
+                        <p>Configure subtitle providers ported from 115master script.</p>
+
+                        <div class="checkboxContainer checkboxContainer-withDescription">
+                            <label>
+                                <input is="emby-checkbox" type="checkbox" id="chkEnableSubtitleCat" />
+                                <span>Enable SubtitleCat Provider</span>
+                            </label>
+                            <div class="fieldDescription">Scrapes subtitles from subtitlecat.com (Sorts by Jaccard
+                                Similarity).</div>
+                        </div>
+
+                        <div class="checkboxContainer checkboxContainer-withDescription">
+                            <label>
+                                <input is="emby-checkbox" type="checkbox" id="chkEnableThunder" />
+                                <span>Enable Thunder Provider</span>
+                            </label>
+                            <div class="fieldDescription">Fetches subtitles from Xunlei/Thunder API.</div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <button is="emby-button" type="submit" class="raised button-submit block">
+                            <span>Save</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            (function () {
+                console.log("[115Master] Script evaluated. Waiting for events...");
+
+                var OneOneFiveMasterConfigurationPage = {
+                    pluginId: "9b7dca24-edf8-4155-bbd6-8c2b0f07448d",
+                    loadConfiguration: function (page) {
+                        console.log("[115Master] Loading config...");
+                        Dashboard.showLoadingMsg();
+                        ApiClient.getPluginConfiguration(this.pluginId).then(function (config) {
+                            console.log("[115Master] Config loaded:", config);
+                            if (page) {
+                                page.querySelector('#chkEnableSubtitleCat').checked = config.EnableSubtitleCat;
+                                page.querySelector('#chkEnableThunder').checked = config.EnableThunder;
+                            }
+                            Dashboard.hideLoadingMsg();
+                        });
+                    },
+                    saveConfiguration: function (page) {
+                        console.log("[115Master] Saving config...");
+                        Dashboard.showLoadingMsg();
+                        var enableSubtitleCat = page.querySelector('#chkEnableSubtitleCat').checked;
+                        var enableThunder = page.querySelector('#chkEnableThunder').checked;
+
+                        ApiClient.getPluginConfiguration(this.pluginId).then(function (config) {
+                            config.EnableSubtitleCat = enableSubtitleCat;
+                            config.EnableThunder = enableThunder;
+                            ApiClient.updatePluginConfiguration(OneOneFiveMasterConfigurationPage.pluginId, config).then(function (result) {
+                                console.log("[115Master] Config saved:", result);
+                                Dashboard.processPluginConfigurationUpdateResult(result);
+                            });
+                        });
+                    }
+                };
+
+                // Use document delegation for robust event binding
+                $(document).on('pageshow', '.oneOneFiveMasterConfigurationPage', function () {
+                    console.log("[115Master] pageshow triggered");
+                    OneOneFiveMasterConfigurationPage.loadConfiguration(this);
+                });
+
+                $(document).on('submit', '.oneOneFiveMasterConfigurationForm', function (e) {
+                    console.log("[115Master] submit triggered");
+                    e.preventDefault();
+                    OneOneFiveMasterConfigurationPage.saveConfiguration($(this).parents('.oneOneFiveMasterConfigurationPage')[0]);
+                    return false;
+                });
+            })();
+        </script>
+    </div>
+</body>
+
+</html>
