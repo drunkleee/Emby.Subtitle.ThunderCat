@@ -70,61 +70,78 @@ namespace Emby.Subtitle.OneOneFiveMaster.Providers
                     return Enumerable.Empty<RemoteSubtitleInfo>();
                 }
 
-                var url = $"{Domain}/index.php?search={Uri.EscapeDataString(keyword)}";
-                _logger.Info($"[SubtitleCat] Fetching: {url}");
-                
-                
-                var options = new HttpRequestOptions
+                int maxRetries = 2;
+                for (int attempt = 1; attempt <= maxRetries; attempt++)
                 {
-                    Url = url,
-                    CancellationToken = cancellationToken
-                };
-                options.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36";
-
-                using var response = await _httpClient.GetResponse(options).ConfigureAwait(false);
-                using var reader = new StreamReader(response.Content);
-                var html = await reader.ReadToEndAsync().ConfigureAwait(false);
-                
-                _logger.Info($"[SubtitleCat] Got response, length: {html.Length}");
-
-                var results = new List<RemoteSubtitleInfo>();
-                
-                // Match table rows with subtitle links
-                var rowPattern = new Regex(@"<tr[^>]*>.*?<td[^>]*>.*?<a\s+href=""([^""]+)""[^>]*>([^<]+)</a>.*?</tr>", 
-                    RegexOptions.Singleline | RegexOptions.IgnoreCase);
-                
-                var matches = rowPattern.Matches(html);
-                _logger.Info($"[SubtitleCat] Found {matches.Count} matches");
-                
-                foreach (Match match in matches.Cast<Match>().Take(10))
-                {
-                    var href = match.Groups[1].Value;
-                    var title = System.Net.WebUtility.HtmlDecode(match.Groups[2].Value.Trim());
-                    
-                    if (string.IsNullOrEmpty(href) || href.StartsWith("#")) continue;
-                    
-                    var similarity = Similarity.GetJaccardSimilarity(request.Name, title);
-                    var score = (int)(similarity * 100);
-
-                    // Encode both URL and language in ID (format: url|language)
-                    var fullHref = href.StartsWith("http") ? href : $"{Domain}/{href.TrimStart('/')}";
-                    var combinedId = $"{fullHref}|{language}";
-                    var encodedId = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(combinedId));
-
-                    results.Add(new RemoteSubtitleInfo
+                    try
                     {
-                        Id = encodedId,
-                        Name = title,
-                        ProviderName = Name,
-                        Format = "srt",
-                        CommunityRating = (float)score
-                    });
-                    
-                    _logger.Info($"[SubtitleCat] Added result: {title}");
-                }
+                        var url = $"{Domain}/index.php?search={Uri.EscapeDataString(keyword)}";
+                        _logger.Info($"[SubtitleCat] Fetching (Attempt {attempt}): {url}");
+                        
+                        var options = new HttpRequestOptions
+                        {
+                            Url = url,
+                            CancellationToken = cancellationToken,
+                            TimeoutMs = 30000 // 30 seconds timeout
+                        };
+                        options.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36";
 
-                _logger.Info($"[SubtitleCat] Returning {results.Count} results");
-                return results;
+                        using var response = await _httpClient.GetResponse(options).ConfigureAwait(false);
+                        using var reader = new StreamReader(response.Content);
+                        var html = await reader.ReadToEndAsync().ConfigureAwait(false);
+                        
+                        _logger.Info($"[SubtitleCat] Got response, length: {html.Length}");
+
+                        var results = new List<RemoteSubtitleInfo>();
+                        
+                        // Match table rows with subtitle links
+                        var rowPattern = new Regex(@"<tr[^>]*>.*?<td[^>]*>.*?<a\s+href=""([^""]+)""[^>]*>([^<]+)</a>.*?</tr>", 
+                            RegexOptions.Singleline | RegexOptions.IgnoreCase);
+                        
+                        var matches = rowPattern.Matches(html);
+                        _logger.Info($"[SubtitleCat] Found {matches.Count} matches");
+                        
+                        foreach (Match match in matches.Cast<Match>().Take(10))
+                        {
+                            var href = match.Groups[1].Value;
+                            var title = System.Net.WebUtility.HtmlDecode(match.Groups[2].Value.Trim());
+                            
+                            if (string.IsNullOrEmpty(href) || href.StartsWith("#")) continue;
+                            
+                            var similarity = Similarity.GetJaccardSimilarity(request.Name, title);
+                            var score = (int)(similarity * 100);
+
+                            // Encode both URL and language in ID (format: url|language)
+                            var fullHref = href.StartsWith("http") ? href : $"{Domain}/{href.TrimStart('/')}";
+                            var combinedId = $"{fullHref}|{language}";
+                            var encodedId = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(combinedId));
+
+                            results.Add(new RemoteSubtitleInfo
+                            {
+                                Id = encodedId,
+                                Name = title,
+                                ProviderName = Name,
+                                Format = "srt",
+                                CommunityRating = (float)score
+                            });
+                            
+                            _logger.Info($"[SubtitleCat] Added result: {title}");
+                        }
+
+                        _logger.Info($"[SubtitleCat] Returning {results.Count} results");
+                        return results;
+                    }
+                    catch (Exception ex)
+                    {
+                         _logger.Warn($"[SubtitleCat] Error searching (Attempt {attempt}/{maxRetries}): {ex.Message}");
+                         if (attempt == maxRetries)
+                         {
+                             _logger.Error($"[SubtitleCat] Max retries reached. Giving up.");
+                         }
+                    }
+                }
+                
+                return Enumerable.Empty<RemoteSubtitleInfo>();
             }
             catch (Exception ex)
             {
