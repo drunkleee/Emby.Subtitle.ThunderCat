@@ -31,6 +31,12 @@
     -   支持手动搜索、自动下载和计划任务。
     -   内置 Base64 编码处理，完美解决 URL 路径导致的下载失败问题。
 
+## 🚀 v1.1.0 更新日志
+
+-   **Thunder CID 完美匹配**: 新增迅雷 CID 哈希匹配功能。插件会自动计算本地视频文件的 SHA1 哈希值，与迅雷数据库进行比对，实现 100% 精准的字幕匹配。
+-   **连接性增强**: 针对 API 接口增加了智能重试机制和 30秒超时设置，有效解决了网络波动导致的搜索失败问题。
+-   **问题修复**: 修复了若干编译错误和超时报错。
+
 ## 📦 安装方法
 
 1.  从 [Releases](https://github.com/drunkleee/Emby.Subtitle.ThunderCat/releases) 页面下载最新的 `Emby.Subtitle.ThunderCat.dll`。

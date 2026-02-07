@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Nullable>enable</Nullable>
     <LangVersion>10.0</LangVersion>
-    <Version>1.0.0.1</Version>
+    <Version>1.1.0</Version>
     <Authors>drunkleee</Authors>
     <Description>Emby subtitle plugin integrating SubtitleCat and Thunder (Xunlei) with smart番号 (JAV) code extraction.</Description>
     <PackageProjectUrl>https://github.com/drunkleee/Emby.Subtitle.ThunderCat</PackageProjectUrl>

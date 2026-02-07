@@ -30,6 +30,12 @@
     -   Supports manual search, automated downloads, and scheduled tasks.
     -   Base64 encoding ensures compatibility with all Emby versions (fixes URL path issues).
 
+## 🚀 What's New in v1.1.0
+
+-   **Thunder CID Matching**: Implemented "Perfect Match" logic. The plugin now hashes your local video files (SHA1) and matches them against Thunder's database for 100% accurate subtitles.
+-   **Enhanced Connectivity**: Added smart retry logic and increased timeouts (30s) to solve network instability issues with API providers.
+-   **Bug Fixes**: Resolved various compilation issues and timeout errors.
+
 ## 📦 Installation
 
 1.  Download the latest `Emby.Subtitle.ThunderCat.dll` from the [Releases](https://github.com/drunkleee/Emby.Subtitle.ThunderCat/releases) page.
