@@ -1,28 +1,36 @@
 # ThunderCat Subtitles for Emby
 
+<div align="center">
+
 ![ThunderCat Logo](https://img.shields.io/badge/Emby-Plugin-green.svg) ![License](https://img.shields.io/badge/License-MIT-blue.svg)
 
-**ThunderCat Subtitles** is a powerful Emby plugin that integrates **SubtitleCat** and **Thunder (Xunlei)** subtitle providers. It is designed to be lightweight, dependency-free, and optimized for finding Chinese subtitles for movies and TV shows, with special support for **JAV codes**.
+[**English**](./README.md) | [**中文说明**](./README_CN.md)
 
-## Features
+</div>
 
--   **Dual Providers**:  
-    -   **SubtitleCat**: High-quality multi-language subtitles.
-    -   **Thunder (Xunlei)**: Fast download speeds, optimized for Chinese content.
--   **Smart Code Extraction**:  
-    -   Automatically extracts unique codes (e.g., `LULU-421`, `ABC-123`, `FC2-PPV-1234567`) from full video titles.
-    -   Ignores irrelevant text in titles to improve search accuracy.
--   **Language Optimization**:  
-    -   Prioritizes **Chinese (Simplified/Traditional)** subtitles when selected.
-    -   Automatically finds the correct language version on SubtitleCat.
--   **Zero External Dependencies**:  
-    -   Implementing using standard .NET libraries and Regex.
-    -   No valid external DLLs required (avoids `HtmlAgilityPack` or `System.Text.Json` loading issues in Emby).
--   **Native Emby Integration**:  
-    -   Configurable via Emby Dashboard.
-    -   Supports manual search and download.
+**ThunderCat Subtitles** is a high-performance, lightweight Emby plugin that integrates **SubtitleCat** and **Thunder (Xunlei)** subtitle providers. Engineered for stability and accuracy, it features a zero-dependency architecture and smart media ID extraction.
 
-## Installation
+## ✨ Key Features
+
+-   **🚀 Zero Dependencies**:  
+    -   Built with pure .NET Standard 2.0. No `HtmlAgilityPack` or `System.Text.Json` required.
+    -   Eliminates "Assembly Not Found" errors common in Emby plugins.
+    -   Uses highly optimized Regex for HTML and JSON parsing.
+
+-   **🎯 Smart Media ID Extraction**:  
+    -   Automatically detects and extracts unique media identifiers (e.g., `ABC-123`, `STUDIO-001`, `EP-01`) from complex filenames.
+    -   Filters out noise to ensure precise subtitle matching for specific media releases.
+
+-   **🌏 Dual Provider Integration**:  
+    -   **SubtitleCat**: Excellent multi-language support with intelligent Jaccard similarity sorting.
+    -   **Thunder (Xunlei)**: High-speed delivery infrastructure, optimized for Asian content.
+
+-   **💎 Native Integration**:  
+    -   Seamlessly integrates with Emby's subtitle search engine.
+    -   Supports manual search, automated downloads, and scheduled tasks.
+    -   Base64 encoding ensures compatibility with all Emby versions (fixes URL path issues).
+
+## 📦 Installation
 
 1.  Download the latest `Emby.Subtitle.ThunderCat.dll` from the [Releases](https://github.com/drunkleee/Emby.Subtitle.ThunderCat/releases) page.
 2.  Copy the DLL file to your Emby server's `plugins` folder:
@@ -30,24 +38,14 @@
     -   **Windows**: `%AppData%\Emby-Server\programdata\plugins`
 3.  Restart Emby Server.
 
-## Configuration
+## ⚙️ Usage
 
 1.  Go to **Emby Dashboard** -> **Plugins**.
-2.  Click on **ThunderCat Subtitles**.
-3.  Enable or disable specific providers as needed:
-    -   [x] Enable SubtitleCat
-    -   [x] Enable Thunder
-4.  Save configuration.
+2.  Verify **ThunderCat Subtitles** is listed.
+3.  Go to **Library** -> **Metadata** -> **Subtitle Downloads**.
+4.  Enable **ThunderCat** and configure your preferred languages.
 
-## Usage
-
-Just search for subtitles as usual in Emby. The plugin will automatically:
-1.  Analyze the video filename/title.
-2.  Extract any manageable codes (like `ABC-123`).
-3.  Search both providers.
-4.  Return matched subtitles sorted by relevance.
-
-## Build from Source
+## 🛠 Build from Source
 
 Requirements:
 -   .NET SDK 6.0 or later
@@ -58,10 +56,6 @@ cd Emby.Subtitle.ThunderCat
 dotnet build -c Release
 ```
 
-## Author
+## 📄 License
 
-**drunkleee**
-
-## License
-
-MIT
+MIT License © 2026 drunkleee
