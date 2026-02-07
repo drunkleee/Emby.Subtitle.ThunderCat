@@ -3,138 +3,181 @@
 
 <head>
     <title>ThunderCat Subtitles</title>
+    <style>
+        .thundercat-container {
+            max-width: 800px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .thundercat-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .thundercat-logo {
+            font-size: 48px;
+        }
+
+        .thundercat-title h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .thundercat-title .version {
+            color: #888;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .thundercat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .thundercat-card h3 {
+            margin: 0 0 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .thundercat-card h3 .icon {
+            font-size: 24px;
+        }
+
+        .thundercat-card p {
+            margin: 0;
+            color: #aaa;
+            line-height: 1.6;
+        }
+
+        .thundercat-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .thundercat-feature {
+            background: rgba(82, 196, 26, 0.1);
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 14px;
+        }
+
+        .thundercat-feature .check {
+            color: #52c41a;
+            margin-right: 8px;
+        }
+
+        .thundercat-usage {
+            background: rgba(24, 144, 255, 0.1);
+            border-left: 4px solid #1890ff;
+        }
+
+        .thundercat-usage h3 {
+            color: #1890ff;
+        }
+
+        .thundercat-usage ol {
+            margin: 0;
+            padding-left: 20px;
+            color: #aaa;
+            line-height: 2;
+        }
+
+        .thundercat-links {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .thundercat-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: inherit;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .thundercat-links a:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+    </style>
 </head>
 
 <body>
     <div data-role="page" class="type-interior pluginConfigurationPage oneOneFiveMasterConfigurationPage"
-        data-require="emby-input,emby-button,emby-select,emby-checkbox">
+        data-require="emby-button">
         <div data-role="content">
-            <div class="content-primary">
-                <form class="oneOneFiveMasterConfigurationForm">
-                    <div class="sectionTitleContainer flex align-items-center">
-                        <h2 class="sectionTitle">ThunderCat Subtitles Configuration</h2>
-                        <a href="https://github.com/drunkleee/Emby.Subtitle.ThunderCat" target="_blank"
-                            class="raised button-alt headerButton emby-button">
-                            <i class="md-icon">help</i>
-                            <span>Help</span>
-                        </a>
+            <div class="content-primary thundercat-container">
+
+                <div class="thundercat-header">
+                    <div class="thundercat-logo">⚡🐱</div>
+                    <div class="thundercat-title">
+                        <h1>ThunderCat Subtitles</h1>
+                        <div class="version">Version 1.0.0 • by drunkleee</div>
                     </div>
+                </div>
 
-                    <div class="verticalSection">
-                        <p>Configure subtitle providers: SubtitleCat and Thunder (Xunlei). Smart番号 extraction enabled.
-                        </p>
-
-                        <div class="checkboxContainer checkboxContainer-withDescription">
-                            <label>
-                                <input is="emby-checkbox" type="checkbox" id="chkEnableSubtitleCat" />
-                                <span>Enable SubtitleCat Provider</span>
-                            </label>
-                            <div class="fieldDescription">Scrapes subtitles from subtitlecat.com (Sorts by Jaccard
-                                Similarity).</div>
-                        </div>
-
-                        <div class="checkboxContainer checkboxContainer-withDescription">
-                            <label>
-                                <input is="emby-checkbox" type="checkbox" id="chkEnableThunder" />
-                                <span>Enable Thunder Provider</span>
-                            </label>
-                            <div class="fieldDescription">Fetches subtitles from Xunlei/Thunder API.</div>
-                        </div>
+                <div class="thundercat-card">
+                    <h3><span class="icon">🌐</span> SubtitleCat Provider</h3>
+                    <p>从 subtitlecat.com 搜索多语言字幕，支持超过 100 种语言。自动按 Jaccard 相似度排序，优先匹配最相关的字幕。</p>
+                    <div class="thundercat-features">
+                        <div class="thundercat-feature"><span class="check">✓</span> 多语言支持</div>
+                        <div class="thundercat-feature"><span class="check">✓</span> 智能相似度排序</div>
+                        <div class="thundercat-feature"><span class="check">✓</span> 中文优先下载</div>
                     </div>
+                </div>
 
-                    <div>
-                        <button is="emby-button" type="submit" class="raised button-submit block">
-                            <span>Save</span>
-                        </button>
+                <div class="thundercat-card">
+                    <h3><span class="icon">⚡</span> Thunder (迅雷) Provider</h3>
+                    <p>使用迅雷字幕 API 搜索字幕，速度快，覆盖面广，特别适合中文资源。</p>
+                    <div class="thundercat-features">
+                        <div class="thundercat-feature"><span class="check">✓</span> 高速下载</div>
+                        <div class="thundercat-feature"><span class="check">✓</span> 中文资源丰富</div>
+                        <div class="thundercat-feature"><span class="check">✓</span> 支持番号搜索</div>
                     </div>
-                </form>
+                </div>
+
+                <div class="thundercat-card">
+                    <h3><span class="icon">🎯</span> 智能番号提取</h3>
+                    <p>自动从文件名中提取番号（如 LULU-421、SONE-342、FC2-PPV-1234567），提高字幕搜索准确率。</p>
+                </div>
+
+                <div class="thundercat-card thundercat-usage">
+                    <h3>📖 使用方法</h3>
+                    <ol>
+                        <li>进入 <b>媒体库设置</b> → <b>高级</b> → <b>字幕下载器</b></li>
+                        <li>勾选 <b>SubtitleCat</b> 和/或 <b>Thunder</b></li>
+                        <li>在视频详情页搜索字幕即可</li>
+                    </ol>
+                </div>
+
+                <div class="thundercat-links">
+                    <a href="https://github.com/drunkleee/Emby.Subtitle.ThunderCat" target="_blank">
+                        <span>📦</span> GitHub 仓库
+                    </a>
+                    <a href="https://github.com/drunkleee/Emby.Subtitle.ThunderCat/issues" target="_blank">
+                        <span>🐛</span> 报告问题
+                    </a>
+                </div>
+
             </div>
         </div>
-
-        <script type="text/javascript">
-            (function () {
-                console.log("[115Master] Script evaluated. Waiting for events...");
-
-                var OneOneFiveMasterConfigurationPage = {
-                    pluginId: "9b7dca24-edf8-4155-bbd6-8c2b0f07448d",
-                    loadConfiguration: function (page) {
-                        console.log("[ThunderCat] Loading config...");
-                        Dashboard.showLoadingMsg();
-                        ApiClient.getPluginConfiguration(this.pluginId).then(function (config) {
-                            console.log("[ThunderCat] Config loaded:", config);
-
-                            // Use setTimeout to ensure DOM is fully ready
-                            setTimeout(function () {
-                                if (page) {
-                                    var chkSubtitleCat = page.querySelector('#chkEnableSubtitleCat');
-                                    var chkThunder = page.querySelector('#chkEnableThunder');
-
-                                    if (chkSubtitleCat && chkThunder) {
-                                        // Set values
-                                        chkSubtitleCat.checked = config.EnableSubtitleCat !== false;
-                                        chkThunder.checked = config.EnableThunder !== false;
-
-                                        // Trigger change events to update Emby checkbox components
-                                        chkSubtitleCat.dispatchEvent(new Event('change', { bubbles: true }));
-                                        chkThunder.dispatchEvent(new Event('change', { bubbles: true }));
-
-                                        console.log("[ThunderCat] Checkboxes set - SubtitleCat:", chkSubtitleCat.checked, "Thunder:", chkThunder.checked);
-                                    } else {
-                                        console.error("[ThunderCat] Checkboxes not found in DOM");
-                                    }
-                                }
-                                Dashboard.hideLoadingMsg();
-                            }, 100);
-                        }).catch(function (error) {
-                            console.error("[ThunderCat] Error loading config:", error);
-                            Dashboard.hideLoadingMsg();
-                        });
-                    },
-                    saveConfiguration: function (page) {
-                        console.log("[ThunderCat] Saving config...");
-                        Dashboard.showLoadingMsg();
-                        var enableSubtitleCat = page.querySelector('#chkEnableSubtitleCat').checked;
-                        var enableThunder = page.querySelector('#chkEnableThunder').checked;
-
-                        ApiClient.getPluginConfiguration(this.pluginId).then(function (config) {
-                            config.EnableSubtitleCat = enableSubtitleCat;
-                            config.EnableThunder = enableThunder;
-                            ApiClient.updatePluginConfiguration(OneOneFiveMasterConfigurationPage.pluginId, config).then(function (result) {
-                                console.log("[ThunderCat] Config saved:", result);
-                                Dashboard.processPluginConfigurationUpdateResult(result);
-                                Dashboard.hideLoadingMsg();
-
-                                // Show success notification
-                                require(['toast'], function (toast) {
-                                    toast('Configuration saved successfully');
-                                });
-                            }).catch(function (error) {
-                                console.error("[ThunderCat] Error saving config:", error);
-                                Dashboard.hideLoadingMsg();
-
-                                // Show error notification
-                                require(['toast'], function (toast) {
-                                    toast('Failed to save configuration');
-                                });
-                            });
-                        });
-                    }
-                };
-
-                // Use document delegation for robust event binding
-                $(document).on('pageshow', '.oneOneFiveMasterConfigurationPage', function () {
-                    console.log("[ThunderCat] pageshow triggered");
-                    OneOneFiveMasterConfigurationPage.loadConfiguration(this);
-                });
-
-                $(document).on('submit', '.oneOneFiveMasterConfigurationForm', function (e) {
-                    console.log("[ThunderCat] submit triggered");
-                    e.preventDefault();
-                    OneOneFiveMasterConfigurationPage.saveConfiguration($(this).parents('.oneOneFiveMasterConfigurationPage')[0]);
-                    return false;
-                });
-            })();
-        </script>
     </div>
 </body>
 
