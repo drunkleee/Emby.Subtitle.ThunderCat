@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>115Master Subtitles</title>
+    <title>ThunderCat Subtitles</title>
 </head>
 
 <body>
@@ -12,8 +12,8 @@
             <div class="content-primary">
                 <form class="oneOneFiveMasterConfigurationForm">
                     <div class="sectionTitleContainer flex align-items-center">
-                        <h2 class="sectionTitle">115Master Subtitles Configuration</h2>
-                        <a href="https://github.com/cbingb666/115master" target="_blank"
+                        <h2 class="sectionTitle">ThunderCat Subtitles Configuration</h2>
+                        <a href="https://github.com/drunkleee/Emby.Subtitle.ThunderCat" target="_blank"
                             class="raised button-alt headerButton emby-button">
                             <i class="md-icon">help</i>
                             <span>Help</span>
@@ -21,7 +21,8 @@
                     </div>
 
                     <div class="verticalSection">
-                        <p>Configure subtitle providers ported from 115master script.</p>
+                        <p>Configure subtitle providers: SubtitleCat and Thunder (Xunlei). Smart番号 extraction enabled.
+                        </p>
 
                         <div class="checkboxContainer checkboxContainer-withDescription">
                             <label>
@@ -57,19 +58,40 @@
                 var OneOneFiveMasterConfigurationPage = {
                     pluginId: "9b7dca24-edf8-4155-bbd6-8c2b0f07448d",
                     loadConfiguration: function (page) {
-                        console.log("[115Master] Loading config...");
+                        console.log("[ThunderCat] Loading config...");
                         Dashboard.showLoadingMsg();
                         ApiClient.getPluginConfiguration(this.pluginId).then(function (config) {
-                            console.log("[115Master] Config loaded:", config);
-                            if (page) {
-                                page.querySelector('#chkEnableSubtitleCat').checked = config.EnableSubtitleCat;
-                                page.querySelector('#chkEnableThunder').checked = config.EnableThunder;
-                            }
+                            console.log("[ThunderCat] Config loaded:", config);
+
+                            // Use setTimeout to ensure DOM is fully ready
+                            setTimeout(function () {
+                                if (page) {
+                                    var chkSubtitleCat = page.querySelector('#chkEnableSubtitleCat');
+                                    var chkThunder = page.querySelector('#chkEnableThunder');
+
+                                    if (chkSubtitleCat && chkThunder) {
+                                        // Set values
+                                        chkSubtitleCat.checked = config.EnableSubtitleCat !== false;
+                                        chkThunder.checked = config.EnableThunder !== false;
+
+                                        // Trigger change events to update Emby checkbox components
+                                        chkSubtitleCat.dispatchEvent(new Event('change', { bubbles: true }));
+                                        chkThunder.dispatchEvent(new Event('change', { bubbles: true }));
+
+                                        console.log("[ThunderCat] Checkboxes set - SubtitleCat:", chkSubtitleCat.checked, "Thunder:", chkThunder.checked);
+                                    } else {
+                                        console.error("[ThunderCat] Checkboxes not found in DOM");
+                                    }
+                                }
+                                Dashboard.hideLoadingMsg();
+                            }, 100);
+                        }).catch(function (error) {
+                            console.error("[ThunderCat] Error loading config:", error);
                             Dashboard.hideLoadingMsg();
                         });
                     },
                     saveConfiguration: function (page) {
-                        console.log("[115Master] Saving config...");
+                        console.log("[ThunderCat] Saving config...");
                         Dashboard.showLoadingMsg();
                         var enableSubtitleCat = page.querySelector('#chkEnableSubtitleCat').checked;
                         var enableThunder = page.querySelector('#chkEnableThunder').checked;
@@ -78,8 +100,22 @@
                             config.EnableSubtitleCat = enableSubtitleCat;
                             config.EnableThunder = enableThunder;
                             ApiClient.updatePluginConfiguration(OneOneFiveMasterConfigurationPage.pluginId, config).then(function (result) {
-                                console.log("[115Master] Config saved:", result);
+                                console.log("[ThunderCat] Config saved:", result);
                                 Dashboard.processPluginConfigurationUpdateResult(result);
+                                Dashboard.hideLoadingMsg();
+
+                                // Show success notification
+                                require(['toast'], function (toast) {
+                                    toast('Configuration saved successfully');
+                                });
+                            }).catch(function (error) {
+                                console.error("[ThunderCat] Error saving config:", error);
+                                Dashboard.hideLoadingMsg();
+
+                                // Show error notification
+                                require(['toast'], function (toast) {
+                                    toast('Failed to save configuration');
+                                });
                             });
                         });
                     }
@@ -87,12 +123,12 @@
 
                 // Use document delegation for robust event binding
                 $(document).on('pageshow', '.oneOneFiveMasterConfigurationPage', function () {
-                    console.log("[115Master] pageshow triggered");
+                    console.log("[ThunderCat] pageshow triggered");
                     OneOneFiveMasterConfigurationPage.loadConfiguration(this);
                 });
 
                 $(document).on('submit', '.oneOneFiveMasterConfigurationForm', function (e) {
-                    console.log("[115Master] submit triggered");
+                    console.log("[ThunderCat] submit triggered");
                     e.preventDefault();
                     OneOneFiveMasterConfigurationPage.saveConfiguration($(this).parents('.oneOneFiveMasterConfigurationPage')[0]);
                     return false;
