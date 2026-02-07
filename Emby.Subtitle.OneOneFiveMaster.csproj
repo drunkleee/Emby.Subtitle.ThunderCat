@@ -5,15 +5,13 @@
     <Nullable>enable</Nullable>
     <LangVersion>10.0</LangVersion>
     <Version>1.0.0.1</Version>
+    <Authors>drunkleee</Authors>
+    <Description>Emby subtitle plugin integrating SubtitleCat and Thunder (Xunlei) with smart番号 (JAV) code extraction.</Description>
+    <PackageProjectUrl>https://github.com/drunkleee/Emby.Subtitle.ThunderCat</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.72" />
     <PackageReference Include="MediaBrowser.Server.Core" Version="4.8.0.80" />
-    <PackageReference Include="System.Memory" Version="4.5.5" />
-    <PackageReference Include="System.Text.Json" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
